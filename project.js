@@ -45,3 +45,34 @@ router.post('/', (req, res) => {
 })
 
 
+router.put(':/id', (req, res) => {
+    const id = req.params.id
+    const project = req.body
+
+    if(project.name && project.description){
+        db.update(id, project)
+        .then(data => {
+            if(data){
+                db.findById(id).then(updatedProject => {
+                    res.status(200).json(updatedProject[0])
+                })
+            }
+            else{
+                res.status(404).json({
+                    message: 'Project with ID cannot be found'
+                })
+            }
+        })
+
+        .catch(() => {
+            res.status(500).json({
+                erroe: 'Error saving post'
+            })
+        })
+    }
+    else{
+        res.status(400).json({
+            errorMessage: 'Please provide the name and description of project'
+        })
+    }
+})
