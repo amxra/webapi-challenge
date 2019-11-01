@@ -21,3 +21,27 @@ router.get('/', (req, res) => {
         })
     })
 })
+
+router.post('/', (req, res) => {
+    
+    const project = req.body
+
+    if(!project.name || !project.description){
+        res.status(400).json({
+            error: 'Please provide name and description'
+        })
+    }
+    else{
+        project.inser(project)
+        .then(pro => {
+            res.status(200).json(pro)
+        })
+        .catch(() => {
+            res.status(500).json({
+                error: 'Internal error'
+            })
+        })
+    }
+})
+
+
