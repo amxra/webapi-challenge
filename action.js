@@ -56,12 +56,12 @@ router.delete('/:id', [validateActionId], (req,res) => {
     db.remove(id)
         .then(response => {
             res.status(200).json({
-                message: `${response} action deleted`
+                message: `${response} action with ${id}  has been deleted`
             })
         })
         .catch(err => {
             res.status(500).json({
-                error: `There was an error while deleting the action from the database ${err}`
+                error: `There was an error while deleting the action with ${id} from the database ${err}`
             })
         })
 })
