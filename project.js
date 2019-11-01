@@ -76,3 +76,26 @@ router.put(':/id', (req, res) => {
         })
     }
 })
+
+router.delete('/:id', (res, req) => {
+    const id = req.params.id;
+
+    db.remove(id)
+    .then(data => {
+        if(data){
+            res.status(200).json({
+                message: "Project deleted"
+            })
+        }
+        else{
+            res.status(404).json({
+                message: 'Post with ID does not exist'
+            })
+        }
+    })
+    .catch(() => {
+        res.status(500).json({
+            error: 'The post could not be deleted'
+        })
+    })
+})
