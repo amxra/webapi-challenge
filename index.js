@@ -12,3 +12,10 @@ I need this code, just don't know where, perhaps should make some middleware, do
 
 Go code!
 */
+
+const server = require('./server')
+
+
+server.listen(process.env.PORT || 3000, ()=>{
+    console.log('listening on ' + (process.env.PORT || 3000))
+})
