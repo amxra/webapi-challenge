@@ -3,32 +3,23 @@ const db = require('./data/helpers/actionModel')
 
 const router = express.Router()
 
-
 router.get('/', (req,res) => {
     db.get()
-    .then(action => {
-        if(action){
-            res.status(200).json(action)
-        }
-        else{
-            res.status(404).json({
-                message: 'Action cannot be executed'
-            })
-        }
-    })
-    .catch(() => {
-        res.status(500).json({
-            error: 'The action could not be found'
+        .then(response => {
+            res.status(200).json(response)
         })
-    })
+        .catch(err => {
+            res.status(500).json({
+                error: `Project information could not be retrieved ${err}`
+            })
+        })
 })
 
-
-router.get('/:id', [validActionId], (req,res) => {
+router.get('/:id', [validateActionId], (req,res) => {
     res.status(200).json(req.action)
 })
 
-router.post('/', [validActionBody], (req,res) => {
+router.post('/', [validateActionBody], (req,res) => {
     const action = req.body;
 
     db.insert(action)
@@ -43,7 +34,7 @@ router.post('/', [validActionBody], (req,res) => {
 
 })
 
-router.put('/:id', [validActionId,validActionBody], (req,res) => {
+router.put('/:id', [validateActionId,validateActionBody], (req,res) => {
     const id = req.params.id;
     const action = req.body;
 
@@ -59,7 +50,7 @@ router.put('/:id', [validActionId,validActionBody], (req,res) => {
 
 })
 
-router.delete('/:id', [validActionId], (req,res) => {
+router.delete('/:id', [validateActionId], (req,res) => {
     const id = req.params.id;
 
     db.remove(id)
@@ -77,7 +68,7 @@ router.delete('/:id', [validActionId], (req,res) => {
 
 // Middleware
 
-function validActionId (req,res,next){
+function validateActionId (req,res,next){
     const id = req.params.id;
 
     db.get(id)
@@ -99,7 +90,7 @@ function validActionId (req,res,next){
         })
 }
 
-function validActionBody(req,res,next){
+function validateActionBody(req,res,next){
     if(Object.keys(req.body).length > 0){
         if(req.body.project_id && req.body.description && req.body.notes){
             next();
